@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "habook"
+version = "0.1.0"
+description = ""
+authors = ["David Knoebl"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.13"
+flask = "^3.1.0"
+sqlalchemy = "^2.0.36"
+pytest = "^8.3.4"
+loguru = "^0.7.3"
+flask-sqlalchemy = "^3.1.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  ".", "src",
+]
