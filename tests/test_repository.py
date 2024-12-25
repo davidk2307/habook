@@ -1,13 +1,13 @@
 import pytest
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
 from repository import DatabaseRepository
 from model import Base
 import tempfile
 import logging
 
 logging.basicConfig()
-logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
+logging.getLogger("sqlalchemy.engine").setLevel(logging.DEBUG)
+
 
 @pytest.fixture(scope="session", autouse=True)
 def database_repository(request):
@@ -20,11 +20,12 @@ def database_repository(request):
         yield DatabaseRepository(engine)
         print("teardown completed")
 
+
 @pytest.fixture(scope="function")
 def parent_category(database_repository):
     database_repository.create_category("Mobilität")
     yield database_repository.get_category_by_name("Mobilität")
-    
+
 
 def test_create_category(database_repository):
     database_repository.create_category("Haushalt")
@@ -32,10 +33,11 @@ def test_create_category(database_repository):
     assert category.name == "Haushalt"
     assert category.id is not None
 
+
 def test_create_category_with_parent(database_repository, parent_category):
     database_repository.create_category("Auto", parent_category)
     category = database_repository.get_category_by_name("Auto")
     assert category.name == "Auto"
     assert category.id is not None
     assert category.parent_category.name == "Mobilität"
-    #assert category.parent_id == parent_category.id
+    # assert category.parent_id == parent_category.id
