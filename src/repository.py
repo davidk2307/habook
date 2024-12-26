@@ -37,4 +37,5 @@ class DatabaseRepository:
     def get_categories(self) -> list[Category]:
         with self.session.begin() as session:
             categories = session.execute(Select(Category)).all()
+            session.expunge_all()
             return categories

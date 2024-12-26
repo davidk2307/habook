@@ -17,12 +17,14 @@
         <div class="basis-11/12">
             <div class="flex flex-row min-h-full">
                 <div class="basis-2/3 bg-platinum-800 rounded-md m-2 p-2">
-                    <form>
+                    <form method="post">
+                        {{ form.csrf_token }}
+                        <!--{{ form.name }}-->
                         <label for="category_name">Name: </label>
-                        <input id="category_name" type="text" class="rounded-md" />
-                        <label for="category_parent">Übergeordnete Kategorie: </label>
-                        <input id="category_parent" type="text" class="rounded-md" />
-                        <button class="bg-platinum-500 hover:bg-platinum-400 rounded-md shadow-sm p-2 m-2">
+                        <input name="{{ form.name.name }}" id="{{ form.name.id }}" type="text" class="rounded-md" value="{{ form.name.data }}" />
+                        <!--<label for="category_parent">Übergeordnete Kategorie: </label>-->
+                        <!--<input id="category_parent" type="text" class="rounded-md" />-->
+                        <button type="submit" class="bg-platinum-500 hover:bg-platinum-400 rounded-md shadow-sm p-2 m-2">
                             Kategorie hinzufügen
                         </button>
                     </form>
