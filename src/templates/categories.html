@@ -17,13 +17,27 @@
         <div class="basis-11/12">
             <div class="flex flex-row min-h-full">
                 <div class="basis-2/3 bg-platinum-800 rounded-md m-2 p-2">
+                    {% if form.errors %}
+                    <div class="w-full border border-bittersweet-400 bg-bittersweet-800 m-2 p-2 mr-3 pr-3">
+                        <ul>
+                            {% for key, value in form.errors.items() %}
+                            <li>{{key}}: {{value}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
                     <form method="post">
                         {{ form.csrf_token }}
                         <!--{{ form.name }}-->
-                        <label for="category_name">Name: </label>
-                        <input name="{{ form.name.name }}" id="{{ form.name.id }}" type="text" class="rounded-md" value="{{ form.name.data }}" />
-                        <!--<label for="category_parent">Übergeordnete Kategorie: </label>-->
-                        <!--<input id="category_parent" type="text" class="rounded-md" />-->
+                        <label for="{{ form.name.id }}">{{form.name.label}}: </label>
+                        {% if not form.name.errors %}
+                            <input name="{{ form.name.name }}" id="{{ form.name.id }}" type="text" class="rounded-md" value="{{ form.name.data }}" />
+                        {% endif %}
+                        {% if form.name.errors %}
+                            <input name="{{ form.name.name }}" id="{{ form.name.id }}" type="text" class="rounded-md border-bittersweet-400" value="{{ form.name.data }}" />
+                        {% endif %}
+                        <label for="{{ form.parent_name.id }}">{{form.parent_name.label}}: </label>
+                        <input name="{{ form.parent_name.name }}" id="{{ form.parent_name.id }}" type="text" class="rounded-md" value="{{ form.parent_name.data }}" />
                         <button type="submit" class="bg-platinum-500 hover:bg-platinum-400 rounded-md shadow-sm p-2 m-2">
                             Kategorie hinzufügen
                         </button>
@@ -47,7 +61,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="basis-1/3 bg-khaki rounded-md m-2 p-2">
+                <div class="basis-1/3 bg-khaki-800 rounded-md m-2 p-2">
                     test2
                 </div>
             </div>

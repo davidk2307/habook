@@ -1,10 +1,10 @@
 from flask import Flask
-from flask import render_template,redirect
+from flask import flash
+from flask import render_template, redirect
 from flask_wtf.csrf import CSRFProtect
 from sqlalchemy import create_engine
 from repository import DatabaseRepository
 import forms
-from loguru import logger
 
 # db = SQLAlchemy(model_class=Base)
 
@@ -20,30 +20,21 @@ csrf = CSRFProtect(app)
 # initialize the app with the extension
 # db.init_app(app)
 
-CATEGORIES = [{"name": "Haushalt"}, {"name": "Lebensmittel"}, {"name": "Gebäck"}]
 
 @app.route("/")
 def index():
     return redirect("/categories")
 
-@app.route("/categories",methods=['GET','POST'])
+
+@app.route("/categories", methods=["GET", "POST"])
 def get_categories():
     form = forms.CategoryForm()
     if form.validate_on_submit():
         repository.create_category(form.name.data)
+        flash("Kategorie angelegt")
     categories = repository.get_categories()
     categories = [category[0] for category in categories]
     return render_template("categories.html", form=form, categories=categories)
-
-
-@app.route('/category', methods=['GET','POST'])
-def submit_category():
-    form = forms.CategoryForm()
-    if form.validate_on_submit():
-        logger.info("test submit")
-        return redirect('categories')
-    return render_template('category.html', form=form)
-
 
 
 app.run(debug=True)
