@@ -11,9 +11,12 @@ class DatabaseRepository:
         self.engine = engine
         self.session = sessionmaker(engine)
 
-    def create_category(self, name: str, parent_category: Category = None) -> None:
+    def create_category(self, name: str, parent_category: Category = None, parent_id: int = None) -> None:
         with self.session.begin() as session:
-            category = Category(name=name, parent_category=parent_category)
+            if parent_id is not None:
+                category = Category(name=name, parent_id=parent_id)
+            else:
+                category = Category(name=name, parent_category=parent_category)
             session.add(category)
             # session.flush()
             # session.commit()
@@ -36,6 +39,8 @@ class DatabaseRepository:
 
     def get_categories(self) -> list[Category]:
         with self.session.begin() as session:
-            categories = session.execute(Select(Category)).all()
+            categories = session.execute(
+                Select(Category).options(joinedload(Category.parent_category))
+            ).all()
             session.expunge_all()
             return categories

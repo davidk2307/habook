@@ -34,10 +34,16 @@ def test_create_category(database_repository):
     assert category.id is not None
 
 
-def test_create_category_with_parent(database_repository, parent_category):
+def test_create_category_with_parent_category(database_repository, parent_category):
     database_repository.create_category("Auto", parent_category)
     category = database_repository.get_category_by_name("Auto")
     assert category.name == "Auto"
     assert category.id is not None
     assert category.parent_category.name == "Mobilität"
-    # assert category.parent_id == parent_category.id
+
+def test_create_category_with_parent_id(database_repository, parent_category):
+    database_repository.create_category("Auto", parent_id=parent_category.id)
+    category = database_repository.get_category_by_name("Auto")
+    assert category.name == "Auto"
+    assert category.id is not None
+    assert category.parent_category.name == "Mobilität"

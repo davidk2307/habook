@@ -30,8 +30,10 @@ def index():
 def get_categories():
     form = forms.CategoryForm()
     if form.validate_on_submit():
-        repository.create_category(form.name.data)
-        flash("Kategorie angelegt")
+        parent_id = None
+        if form.parent_name.data is not None and form.parent_name.data != "":
+            parent_id = int(form.parent_name.data)
+        repository.create_category(form.name.data, parent_id=parent_id)
     categories = repository.get_categories()
     categories = [category[0] for category in categories]
     return render_template("categories.html", form=form, categories=categories)

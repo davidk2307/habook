@@ -26,4 +26,5 @@ class Category(Base):
 
 if __name__ == "__main__":
     engine = create_engine("sqlite:////Users/david/Documents/projects/habook/habook.db")
+    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)

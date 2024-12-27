@@ -3,22 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!--<link href="../css/output.css" rel="stylesheet">-->
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/output.css') }}">
 </head>
 <body>
     <div class="flex flex-col h-screen">
         <div class="basis-auto">
-            <div class="flex items-baseline bg-oxford_blue text-white min-h-full">
-                <a href="test.html" class="p-2">Menu 1</a>
-                <a href="test.html" class="p-2">Menu 2</a>
+            <div class="flex items-baseline bg-oxford_blue-600 text-white min-h-full">
+                <div class="group">
+                    <p class="p-2 hover:bg-oxford_blue-700">Haushaltsbuch</p>
+                    <div class="absolute hidden group-hover:block group-hover:bg-oxford_blue-700 shadow-lg shadow-oxford_blue-600">
+                        <ul>
+                            <li class="p-2">Kategorien</li>
+                            <li class="p-2">Einträge</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="group">
+                    <p class="p-2 hover:bg-oxford_blue-700">Vermögensbuch</p>
+                    <div class="absolute hidden group-hover:block group-hover:bg-oxford_blue-700 shadow-lg shadow-oxford_blue-600">
+                        <ul>
+                            <li class="p-2">Immobilien</li>
+                            <li class="p-2">Aktien</li>
+                            <li class="p-2">Fonds/ETFs</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="basis-11/12">
             <div class="flex flex-row min-h-full">
                 <div class="basis-2/3 bg-platinum-800 rounded-md m-2 p-2">
                     {% if form.errors %}
-                    <div class="w-full border border-bittersweet-400 bg-bittersweet-800 m-2 p-2 mr-3 pr-3">
+                    <div class="border border-bittersweet-400 bg-bittersweet-800 m-2 p-2">
                         <ul>
                             {% for key, value in form.errors.items() %}
                             <li>{{key}}: {{value}}</li>
@@ -29,20 +45,22 @@
                     <form method="post">
                         {{ form.csrf_token }}
                         <!--{{ form.name }}-->
-                        <label for="{{ form.name.id }}">{{form.name.label}}: </label>
-                        {% if not form.name.errors %}
-                            <input name="{{ form.name.name }}" id="{{ form.name.id }}" type="text" class="rounded-md" value="{{ form.name.data }}" />
-                        {% endif %}
-                        {% if form.name.errors %}
-                            <input name="{{ form.name.name }}" id="{{ form.name.id }}" type="text" class="rounded-md border-bittersweet-400" value="{{ form.name.data }}" />
-                        {% endif %}
+                        <label for="{{ form.name.id }}">{{form.name.label}}: </label>    
+                        <input name="{{ form.name.name }}" id="{{ form.name.id }}" type="text" class="rounded-md {% if form.name.errors %}border-bittersweet-400{% endif %}" value="{{ form.name.data }}" />
+                        
                         <label for="{{ form.parent_name.id }}">{{form.parent_name.label}}: </label>
-                        <input name="{{ form.parent_name.name }}" id="{{ form.parent_name.id }}" type="text" class="rounded-md" value="{{ form.parent_name.data }}" />
+                        <!--<input name="{{ form.parent_name.name }}" id="{{ form.parent_name.id }}" type="text" class="rounded-md {% if form.parent_name.errors %}border-bittersweet-400{% endif %}" value="{{ form.parent_name.data }}" />-->
+                        <select name="{{ form.parent_name.name}}" id="{{ form.parent_name.id }}" class="rounded-md">
+                            <option value="">-- Bitte wählen --</option>
+                            {% for item in categories %}
+                            <option value="{{ item.id }}">{{ item.name }}</option>
+                            {% endfor %}
+                        </select>
                         <button type="submit" class="bg-platinum-500 hover:bg-platinum-400 rounded-md shadow-sm p-2 m-2">
                             Kategorie hinzufügen
                         </button>
                     </form>
-                    <div class="relative">
+                    <div>
                         <table class="table-auto rounded-md w-full shadow-lg">
                             <thead>
                                 <tr class="bg-platinum-400">
@@ -54,7 +72,7 @@
                             {% for item in categories %}
                                 <tr class="odd:bg-platinum-500 even:bg-platinum-600 hover:bg-platinum-700">
                                     <td class="px-3 py-3 align-middle text-center">{{ item.name }}</td>
-                                    <td class="px-3 py-3 align-middle text-center">test</td>
+                                    <td class="px-3 py-3 align-middle text-center">{% if item.parent_category %}{{ item.parent_category.name }}{% else %}{% endif %}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
