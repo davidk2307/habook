@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content_left %}
+<div>
+    <table class="table-auto rounded-md w-full shadow-lg">
+        <thead>
+            <tr class="bg-platinum-400">
+                <th class="px-3 py-3 align-middle text-center">Datum</th>
+                <th class="px-3 py-3 align-middle text-center">Bezeichnung</th>
+                <th class="px-3 py-3 align-middle text-center">Kategorie</th>
+                <th class="px-3 py-3 align-middle text-center text-bittersweet-100">Betrag</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in booking_lines %}
+            <tr class="odd:bg-platinum-500 even:bg-platinum-600 hover:bg-platinum-700">
+                <td class="px-3 py-3 align-middle text-center">{{ item.date.strftime("%d.%m.%Y") }}</td>
+                <td class="px-3 py-3 align-middle text-center">{{ item.description }}</td>
+                <td class="px-3 py-3 align-middle text-center">{{ item.category.name }}</td>
+                <td class="px-3 py-3 align-middle text-right {% if item.amount_negative %}text-bittersweet-300{% endif %}">{{ item.amount_formatted }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content_left %}
